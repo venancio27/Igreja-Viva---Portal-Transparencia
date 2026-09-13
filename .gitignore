@@ -6,9 +6,9 @@
 client_secret*.json
 token.json
 
-# Planilhas de trabalho locais que não devem ser publicadas (dados reais de doadores)
-# Renomeie um arquivo real para algo como *.privado.xlsx para que fique ignorado.
-*.privado.xlsx
+# Planilhas de trabalho locais. A fonte de verdade é a planilha do Google Drive;
+# a cópia local serve só como backup e referência, então não vai para o repositório.
+*.xlsx
 *.privado.csv
 
 # Sistema operacional

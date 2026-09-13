@@ -54,6 +54,12 @@ Legenda: `[ ]` pendente · `[~]` em andamento · `[x]` concluído
 - [x] Contagem animada dos números quando entram na tela
 - [x] Respeitar `prefers-reduced-motion` em todas as animações
 - [x] Manter o estilo editorial na tabela, que continua sem cantos arredondados
+- [x] Ícone em contorno laranja em cada indicador e em cada card de "Quem confere"
+- [x] Sparkline do acumulado dentro do card "Arrecadado"
+- [x] Trilha de etapas no card "Meta total", mostrando em qual das quatro estamos
+- [x] Anel da etapa maior, com duas casas decimais
+- [x] Entrada escalonada e realce sutil ao passar o mouse nos indicadores
+- [x] Planilha local fora do versionamento *(a fonte de verdade é o Drive)*
 
 ---
 
