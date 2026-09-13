@@ -24,12 +24,21 @@ e ele aplica no Google Drive.
 O arquivo `campanha-casa-igreja-viva.xlsx` na pasta é apenas uma cópia de referência: **o site
 não lê esse arquivo**, lê a planilha do Drive.
 
-### Nunca substituir a planilha do Drive
+### Nunca substituir a planilha do Drive, nem apagar/recriar uma aba `pub_`
 
 As URLs publicadas dependem do documento **e** do `gid` de cada aba. Subir um `.xlsx` novo cria
 outro documento, os cinco endereços do `CONFIG` morrem e o site cai para dados de demonstração.
-Alterações devem ser feitas **na planilha existente, no lugar**. Se a substituição for mesmo
-inevitável, é preciso republicar as cinco abas e atualizar os cinco `gid` no `CONFIG`.
+Alterações devem ser feitas **na planilha existente, no lugar**.
+
+**Já aconteceu de verdade** (2026-09-13): uma sessão de IA reestruturou as abas `pub_` para
+torná-las automáticas, e isso derrubou a publicação do documento inteiro — os 5 links pararam
+de funcionar e precisaram ser republicados com `gid` novos. A causa mais provável é apagar e
+recriar uma aba em vez de só editar fórmulas dentro dela. Qualquer mudança estrutural na
+planilha deve ser seguida de um teste imediato: buscar as 5 URLs publicadas e conferir se ainda
+respondem com os dados esperados, antes de considerar a tarefa concluída.
+
+Se a substituição for mesmo inevitável, é preciso republicar as cinco abas e atualizar os cinco
+`gid` no `CONFIG` do `index.html`.
 
 ### Estrutura da planilha
 
