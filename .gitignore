@@ -1,0 +1,31 @@
+# Segredos / credenciais (ex.: futura integração com Google Sheets/Drive API)
+.env
+.env.*
+*credentials*.json
+*service-account*.json
+client_secret*.json
+token.json
+
+# Planilhas de trabalho locais que não devem ser publicadas (dados reais de doadores)
+# Renomeie um arquivo real para algo como *.privado.xlsx para que fique ignorado.
+*.privado.xlsx
+*.privado.csv
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editores / IDEs
+.vscode/
+.idea/
+*.swp
+
+# Logs e temporários
+*.log
+*.tmp
+~$*
+
+# Node (caso alguma ferramenta de build seja adicionada futuramente)
+node_modules/
+dist/
