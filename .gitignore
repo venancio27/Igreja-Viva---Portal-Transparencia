@@ -29,3 +29,6 @@ desktop.ini
 # Node (caso alguma ferramenta de build seja adicionada futuramente)
 node_modules/
 dist/
+
+# Pastas de deploy rápido/temporário (ex.: Netlify Drop) — cópia gerada, não é fonte
+deploy-netlify-drop/

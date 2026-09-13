@@ -214,7 +214,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}
 </head>
 <body>
 
-<div class="demo" id="demoBanner">Dados de demonstração. Conecte a planilha da campanha em <code>CONFIG.PLANILHA_ID</code> para exibir os números reais.</div>
+<div class="demo" id="demoBanner">Dados de demonstração. Configure <code>CONFIG.PUB_BASE</code> e <code>CONFIG.GIDS</code> para exibir os números reais.</div>
 
 <nav class="nav">
   <div class="nav__in">
@@ -430,13 +430,16 @@ footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}
 <script>
 /* ============================================================
    CONFIGURAÇÃO
-   Publique as abas pub_* da planilha e coloque o ID abaixo.
-   Enquanto PLANILHA_ID for null, a página usa dados de exemplo.
+   Cada aba da planilha é publicada individualmente em
+   Arquivo > Compartilhar > Publicar na web > CSV, o que gera uma
+   URL do tipo ".../pub?gid=<gid da aba>&single=true&output=csv".
+   Todas as abas ficam sob o mesmo PUB_BASE; só o gid muda.
+   Enquanto PUB_BASE for null, a página usa dados de exemplo.
    ============================================================ */
 const CONFIG = {
-  PLANILHA_ID: null,            // ex.: "1AbCd...XyZ"
-  ABAS: { kpis:'pub_kpis', serie:'pub_serie', origem:'pub_origem', despesas:'pub_despesas', fases:'pub_fases' },
-  LINK_PLANILHA: '#'
+  PUB_BASE: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHP7sRGMRw3LYdJ6MRkrAPWyJWzTpztfo4V712pP0dfcNr5I5fm1PNvmRqtDt5eQ/pub',
+  GIDS: { kpis:'556216463', serie:'1702881789', origem:'588358188', despesas:'745557698', fases:'1436816708' },
+  LINK_PLANILHA: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHP7sRGMRw3LYdJ6MRkrAPWyJWzTpztfo4V712pP0dfcNr5I5fm1PNvmRqtDt5eQ/pubhtml'
 };
 
 /* ---------- dados de exemplo (mesma forma das abas) ---------- */
@@ -460,6 +463,14 @@ const MOCK = {
 const $ = s => document.querySelector(s);
 const brl = (v,d=0) => v.toLocaleString('pt-BR',{style:'currency',currency:'BRL',minimumFractionDigits:d,maximumFractionDigits:d});
 const num = v => v.toLocaleString('pt-BR');
+const MESES=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+// a aba pub_serie pede o mês no formato aaaa-mm; aqui viramos isso em rótulo curto (ex.: "Mai/26")
+function mesLabel(m){
+  const match=/^(\d{4})-(\d{2})$/.exec(String(m).trim());
+  if(!match) return m;
+  const nome=MESES[+match[2]-1];
+  return nome ? `${nome}/${match[1].slice(2)}` : m;
+}
 
 function parseCSV(txt){
   const rows=[];let row=[],cur='',q=false;
@@ -473,25 +484,31 @@ function parseCSV(txt){
   if(cur||row.length){row.push(cur);rows.push(row);}
   if(!rows.length) return [];
   const head=rows.shift().map(h=>h.trim().toLowerCase());
-  return rows.filter(r=>r.some(c=>c.trim()!=='')).map(r=>{
-    const o={}; head.forEach((h,i)=>{
-      const raw=(r[i]??'').trim();
-      const n=raw.replace(/\./g,'').replace(',','.');
-      o[h]= raw!=='' && !isNaN(n) && /^-?[\d.,]+$/.test(raw) ? parseFloat(n) : raw;
-    }); return o;
-  });
+  return rows
+    .filter(r=>r.some(c=>c.trim()!==''))
+    // linhas de instrução da planilha (ex.: "Digite os meses...") só preenchem a 1ª coluna
+    .filter(r=>r.length<2 || r.slice(1).some(c=>c.trim()!==''))
+    .map(r=>{
+      const o={}; head.forEach((h,i)=>{
+        const raw=(r[i]??'').trim();
+        // valores da planilha vêm formatados como moeda: "R$ 1.234,56"
+        const semMoeda=raw.replace(/^R\$\s*/i,'');
+        const ehNumero=semMoeda!=='' && /^-?[\d.,]+$/.test(semMoeda);
+        o[h]= ehNumero ? parseFloat(semMoeda.replace(/\./g,'').replace(',','.')) : raw;
+      }); return o;
+    });
 }
 
-async function aba(nome){
-  const url=`https://docs.google.com/spreadsheets/d/${CONFIG.PLANILHA_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(nome)}`;
-  const r=await fetch(url); if(!r.ok) throw new Error(nome);
+async function aba(chave){
+  const url=`${CONFIG.PUB_BASE}?gid=${CONFIG.GIDS[chave]}&single=true&output=csv`;
+  const r=await fetch(url); if(!r.ok) throw new Error(chave);
   return parseCSV(await r.text());
 }
 
 async function carregar(){
-  if(!CONFIG.PLANILHA_ID) return MOCK;
+  if(!CONFIG.PUB_BASE || !CONFIG.GIDS.kpis) return MOCK;
   try{
-    const [k,s,o,d,f]=await Promise.all(Object.values(CONFIG.ABAS).map(aba));
+    const [k,s,o,d,f]=await Promise.all(Object.keys(CONFIG.GIDS).map(aba));
     const kpis={}; k.forEach(r=>kpis[String(r.chave).trim()]=r.valor);
     $('#demoBanner').hidden=true;
     return {kpis,serie:s,origem:o,despesas:d,fases:f};
@@ -529,7 +546,7 @@ function render(D){
   // kpis
   const kpiList=[
     ['Arrecadado',brl(arrec),`de ${brl(meta)}`,false],
-    ['Pessoas que já doaram',num(K.doadores),`ticket médio de ${brl(arrec/K.doadores)}`,false],
+    ['Pessoas que já doaram',num(K.doadores),K.doadores>0?`ticket médio de ${brl(arrec/K.doadores)}`:'seja a primeira pessoa a doar',false],
     ['Saldo em caixa hoje',brl(saldo),`${brl(desp)} já foram gastos na campanha`,false],
     ['Metros quadrados conquistados',`${num(m2Feitos)} m²`,`de ${num(m2Total)} m²`,false],
     ['Faltam',brl(meta-arrec),'para chegar na meta',false],
@@ -575,7 +592,7 @@ function render(D){
   let acc=0;
   const tb=D.serie.map(r=>{
     const s=(+r.entradas)-(+r.saidas); acc+=s;
-    return `<tr><td>${r.mes}</td><td class="pos">${brl(+r.entradas)}</td>
+    return `<tr><td>${mesLabel(r.mes)}</td><td class="pos">${brl(+r.entradas)}</td>
       <td class="neg">−${brl(+r.saidas)}</td><td>${brl(s)}</td><td><b>${brl(acc)}</b></td></tr>`;
   }).join('');
   $('#tabela tbody').innerHTML=tb;
@@ -586,7 +603,7 @@ function render(D){
 
 function linha(serie){
   const svg=$('#chartLinha'), W=640,H=260, pad={l:8,r:8,t:18,b:28};
-  let acc=0; const pts=serie.map(r=>{acc+=+r.entradas;return {mes:r.mes,v:acc}});
+  let acc=0; const pts=serie.map(r=>{acc+=+r.entradas;return {mes:mesLabel(r.mes),v:acc}});
   const max=Math.max(...pts.map(p=>p.v))*1.12;
   const x=i=>pad.l+i*((W-pad.l-pad.r)/(pts.length-1||1));
   const y=v=>H-pad.b-(v/max)*(H-pad.t-pad.b);
