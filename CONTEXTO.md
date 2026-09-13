@@ -39,10 +39,18 @@ prestação de contas), mostrando:
 ## Fonte de dados
 
 Uma planilha Google Sheets (preenchida manualmente pela tesouraria) é a fonte única de
-verdade. O HTML lê os dados via export CSV do Google Sheets (`gviz/tq?tqx=out:csv`), sem
-backend — `CONFIG.PLANILHA_ID` no `portal-casa-igreja-viva.html` aponta para o ID da
-planilha. Enquanto não configurado, o site roda em modo demonstração com dados fake e um
-aviso visível disso.
+verdade, com 5 abas: `pub_kpis`, `pub_serie`, `pub_origem`, `pub_despesas`, `pub_fases`.
+Cada aba é publicada individualmente via **Arquivo → Compartilhar → Publicar na
+web → CSV**, o que gera uma URL fixa por aba (`.../pub?gid=<id da aba>&output=csv`), todas
+sob o mesmo `CONFIG.PUB_BASE` em `portal-casa-igreja-viva.html` — só o `gid` muda por aba
+(mapeado em `CONFIG.GIDS`). Sem backend, sem build step. Enquanto `PUB_BASE`/`GIDS` não
+estiverem configurados, o site roda em modo demonstração com dados fake e um aviso visível
+disso.
+
+Os valores nas células vêm formatados como moeda BR (`R$ 1.234,56`) e as abas trazem
+linhas de instrução para quem preenche (ex.: "Digite os meses no formato aaaa-mm") — o
+parser CSV do site (`parseCSV`) já remove o prefixo `R$`, converte separadores pt-BR e
+descarta essas linhas de instrução automaticamente.
 
 ## Decisões de design
 
