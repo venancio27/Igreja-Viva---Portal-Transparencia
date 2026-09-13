@@ -24,6 +24,19 @@ Legenda: `[ ]` pendente · `[~]` em andamento · `[x]` concluído
   Não apagar a linha `preco_m2`: as fórmulas usam posição de célula.
   *(o site aceita os dois nomes durante a transição)*
 - [ ] Medir o tempo de renderização do mosaico de 10.000 quadradinhos em celular simples
+
+## Incidente — publicação da planilha perdida (2026-09-13)
+> Registrado para não repetir.
+
+Uma sessão do Claude via extensão web reestruturou as abas `pub_` da planilha (a pedido de um
+prompt deste projeto, para tornar `pub_origem`/`pub_despesas`/`pub_serie` automáticas). Isso
+apagou a publicação inteira do documento — os 5 links antigos pararam de funcionar e teve que
+ser tudo republicado, com `gid` novos.
+
+- [x] Republicar as 5 abas e atualizar `CONFIG.GIDS` no `index.html` com os novos `gid`
+- [x] Validar as 5 novas URLs e rodar o site contra os dados reais antes de considerar resolvido
+- **Decisão**: `pub_serie` agora só lista meses com algum lançamento, em vez de um calendário
+  fixo do início ao fim da campanha. Ficou assim de propósito — ver "Decisões tomadas" abaixo.
 - [x] Reduzir de 6 para 4 indicadores, sem repetir o mesmo número em formatos diferentes
 - [x] Usar a meta da etapa atual como referência principal, e não o total de R$ 1.000.000
 - [x] Mover "saldo em caixa" dos indicadores de topo para a prestação de contas
@@ -101,6 +114,11 @@ Legenda: `[ ]` pendente · `[~]` em andamento · `[x]` concluído
   valor acessível que a campanha precisa comunicar
 - Nada de "comprar": ninguém compra pedaço da casa, a comunidade conquista junto
 - O mosaico tem um quadradinho por cota, o que mostra o tamanho real da tarefa
+
+**Gráfico mensal**
+- `pub_serie` lista só os meses com algum lançamento, não um calendário fixo do início ao fim
+- Um mês sem nenhuma doação nem despesa simplesmente não aparece no gráfico — decisão
+  consciente, para manter a fórmula simples
 
 **Movimento e identidade visual**
 - Sem rede de partículas reagindo ao mouse: pesa em celular simples e não existe em toque
