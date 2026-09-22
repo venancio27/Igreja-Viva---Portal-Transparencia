@@ -8,8 +8,14 @@ Foursquare. Site estático, sem build, alimentado por uma planilha do Google.
 
 ## Arquitetura
 
-- `index.html` — o site inteiro: HTML, CSS e JS num arquivo só, imagens embutidas em base64.
-  Sem framework, sem build, sem backend.
+- `index.html` — o site inteiro: HTML, CSS e JS num arquivo só. Sem framework, sem build, sem backend.
+- As imagens do topo ainda estão embutidas em base64, herança de quando o arquivo precisava ser
+  portátil. **Imagens novas vão como arquivo em `imagens/`**, não em base64: ficam menores, o
+  navegador guarda em cache e o HTML não incha. Converter foto para JPG antes de subir — o print
+  de capa do vídeo saiu de 278 KB em PNG para 31 KB em JPG.
+- `documentos/` guarda os PDFs públicos (ata, relatórios), servidos pelo próprio domínio em vez
+  do Drive: link do Drive depende de permissão por arquivo, e "solicitar acesso" numa página de
+  prestação de contas parece que estão escondendo algo.
 - Os dados vêm de uma planilha do Google publicada em CSV, lida no navegador via `fetch`.
 - `CONFIG` no topo do `<script>` concentra `PUB_BASE`, os `GIDS` de cada aba e a lista de documentos.
 - Publicação: `git push` na branch `homolog` → o Netlify publica sozinho em

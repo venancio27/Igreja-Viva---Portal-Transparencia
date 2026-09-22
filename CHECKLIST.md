@@ -49,7 +49,8 @@ ser tudo republicado, com `gid` novos.
 - [x] Botão "copiar chave PIX" com confirmação visual e seleção do texto como alternativa
 - [x] Publicar os dados bancários reais (ver "Decisões" abaixo)
 - [x] Avisar que o nome na confirmação do banco é a razão social da igreja
-- [x] Barra fixa discreta de doação no celular
+- [x] ~~Barra fixa discreta de doação no celular~~ — removida: o selo do Netlify cobria a barra,
+  e o botão "Doar" do topo já fica visível o tempo todo
 - [x] Tabela reduzida a 3 colunas, com os saldos atrás de um botão
 - [x] Encurtar as aberturas de seção e os textos de "Quem confere"
 - [x] Remover os dois links mortos de documentos; sem link, o documento aparece como "em breve"
@@ -79,7 +80,14 @@ ser tudo republicado, com `gid` novos.
 ## Pendências externas
 > Dependem da igreja, não do desenvolvimento.
 
-- [ ] Gravar os três vídeos → então mover a seção para o topo
+- [x] Primeiro vídeo publicado na seção, como destaque único ligado ao Instagram
+- [x] Vídeo posicionado logo antes das cotas: a história de como a sede foi feita "por muitas
+  mãos" desemboca direto em "sua doação vira um pedaço da casa"
+- [ ] Gravar os outros dois vídeos. Ao invés de agrupar os três numa seção só, considerar
+  distribuir cada um onde ele trabalha: a visita ao prédio perto do topo (é o objeto do desejo)
+  e o da tesouraria dentro de "Quem confere" (é prova de confiança)
+- [ ] Decidir com o pastor e a tesouraria o que entra no lugar do extrato bancário
+  *(extrato cru expõe nome e valor de cada doador, contra o que a própria página promete)*
 - [ ] Enviar ao Drive os PDFs da ata da assembleia e do extrato da conta
 - [ ] **(planilha)** Corrigir o passo 5 da aba `LEIA-ME`: não existe mais `CONFIG.PLANILHA_ID`,
   agora são `CONFIG.PUB_BASE` e `CONFIG.GIDS`

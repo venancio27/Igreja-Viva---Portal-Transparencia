@@ -151,18 +151,6 @@ section[id],header[id]{scroll-margin-top:84px}
 .doc-breve{color:var(--fumaca)}
 .doc-breve em{font-style:normal;font-size:13px;opacity:.8}
 
-/* barra fixa de doação, só no celular */
-.fixa{display:none}
-@media(max-width:760px){
-  .fixa{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:60;align-items:center;
-    justify-content:space-between;gap:12px;padding:9px 14px;
-    background:rgba(14,11,9,.94);backdrop-filter:blur(12px);border-top:1px solid var(--linha)}
-  .fixa span{font-size:12.5px;color:var(--fumaca);line-height:1.2}
-  .fixa span b{display:block;color:var(--cal);font-size:14px;font-weight:700}
-  .fixa .btn{padding:9px 18px;font-size:14px;flex:none}
-  body{padding-bottom:62px}
-}
-
 /* ---------- fases ---------- */
 .fases{display:grid;gap:0}
 .fase{display:grid;grid-template-columns:64px 1fr 190px;gap:24px;align-items:start;
@@ -228,15 +216,28 @@ tfoot td{font-weight:700;border-bottom:0;border-top:1px solid rgba(247,239,227,.
 .tabela-wrap{overflow-x:auto}
 
 /* ---------- vídeos ---------- */
-.videos{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-@media(max-width:860px){.videos{grid-template-columns:1fr}}
-.video{display:block;text-decoration:none;color:inherit;border:1px solid var(--linha);
-  border-radius:14px;overflow:hidden}
-.video__ph{aspect-ratio:16/9;background:var(--tijolo2);display:flex;align-items:center;justify-content:center;position:relative}
-.video__ph::after{content:"";width:0;height:0;border-left:20px solid var(--ouro);border-top:13px solid transparent;border-bottom:13px solid transparent;margin-left:5px}
-.video__b{padding:16px 18px}
-.video__b b{display:block;font-size:16px;margin-bottom:5px}
-.video__b span{font-size:13.5px;color:var(--fumaca)}
+.vdest{display:grid;grid-template-columns:300px 1fr;gap:clamp(24px,4vw,44px);align-items:center;
+  text-decoration:none;color:inherit;border:1px solid var(--linha);border-radius:16px;
+  padding:clamp(18px,2.5vw,26px);background:linear-gradient(165deg,var(--tijolo),rgba(25,19,16,.3));
+  transition:border-color .25s ease,box-shadow .25s ease}
+.vdest:hover{border-color:rgba(255,122,24,.34);box-shadow:0 10px 34px -20px rgba(255,122,24,.6)}
+@media(max-width:760px){.vdest{grid-template-columns:1fr;gap:20px}}
+.vdest__capa{position:relative;border-radius:12px;overflow:hidden;background:var(--tijolo2)}
+.vdest__capa img{width:100%;aspect-ratio:484/757;object-fit:cover;display:block}
+@media(max-width:760px){.vdest__capa img{aspect-ratio:4/3;object-position:center 32%}}
+.vdest__play{position:absolute;left:50%;top:50%;width:62px;height:62px;margin:-31px 0 0 -31px;
+  border-radius:50%;background:rgba(14,11,9,.62);backdrop-filter:blur(3px);
+  border:1.5px solid rgba(247,239,227,.75)}
+.vdest__play::after{content:"";position:absolute;left:24px;top:19px;width:0;height:0;
+  border-left:19px solid var(--cal);border-top:12px solid transparent;border-bottom:12px solid transparent}
+.vdest:hover .vdest__play{background:rgba(255,122,24,.85);border-color:transparent}
+.vdest__tag{font-size:13px;color:var(--ouro);display:block;margin-bottom:9px}
+.vdest__txt b{display:block;font-family:var(--display);font-weight:900;
+  font-size:clamp(22px,2.9vw,32px);line-height:1.08;letter-spacing:-.01em;margin-bottom:12px}
+.vdest__txt p{color:#BFB0A0;font-size:15.5px;max-width:50ch;margin-bottom:18px}
+.vdest__cta{display:inline-block;background:linear-gradient(96deg,var(--brasa),var(--ouro));
+  color:#1A0F04;font-weight:700;padding:11px 22px;border-radius:9px;font-size:15px}
+.vdest__nota{margin:22px 0 0;font-size:14.5px;color:var(--fumaca);max-width:62ch}
 
 /* ---------- doar ---------- */
 .doar{background:linear-gradient(165deg,var(--tijolo),rgba(25,19,16,.4));
@@ -260,9 +261,8 @@ tfoot td{font-weight:700;border-bottom:0;border-top:1px solid rgba(247,239,227,.
 .ajudas li::before{content:"";position:absolute;left:0;top:.62em;width:9px;height:9px;background:var(--brasa)}
 
 /* ---------- confere ---------- */
-.regras{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-@media(max-width:980px){.regras{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:560px){.regras{grid-template-columns:1fr}}
+.regras{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:860px){.regras{grid-template-columns:1fr}}
 .regra{background:linear-gradient(165deg,var(--tijolo),rgba(25,19,16,.3));
   border:1px solid var(--linha);border-radius:14px;padding:22px 20px 24px}
 .regra__selo{margin-bottom:14px;line-height:0}
@@ -297,9 +297,9 @@ footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}
     </a>
     <div class="nav__links">
       <a href="#fases">Etapas</a>
+      <a href="#videos">Vídeo</a>
       <a href="#metros">Cotas</a>
       <a href="#contas">Prestação de contas</a>
-      <a href="#videos">Vídeos</a>
     </div>
     <a class="btn btn--sm" href="#doar">Doar</a>
   </div>
@@ -358,6 +358,29 @@ footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}
   </div>
 </section>
 
+<section class="sec" id="videos">
+  <div class="wrap">
+    <div class="sec__head">
+      <h2>Por que essa casa</h2>
+      <p>Antes de pedir a sua ajuda, explicamos.</p>
+    </div>
+    <a class="vdest" href="https://www.instagram.com/p/DdSmvKcNrNo/" target="_blank" rel="noopener">
+      <div class="vdest__capa">
+        <img src="imagens/video-sede.jpg" alt="Fachada da sede atual, com o letreiro Igreja Viva" loading="lazy">
+        <span class="vdest__play" aria-hidden="true"></span>
+      </div>
+      <div class="vdest__txt">
+        <span class="vdest__tag">Vídeo · 1 min</span>
+        <b>Como nossa sede foi construída</b>
+        <p>Pastor Daniel conta a história do prédio que a comunidade levantou com as próprias
+          mãos, tijolo por tijolo, com dízimo, ofertas, fé, oração e com a generosidade de pessoas que acreditaram na obra de Deus. Ele conta também, por que agora precisamos começar
+          uma casa nova.</p>
+        <span class="vdest__cta">Assistir no Instagram</span>
+      </div>
+    </a>
+    <p class="vdest__nota">Outros vídeos explicando a situação estão sendo gravados. Aguarde.</p>
+  </div>
+</section>
 <section class="sec" id="metros">
   <div class="wrap">
     <div class="m2">
@@ -443,10 +466,6 @@ footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}
         <h3>Conta separada</h3><p>Conta bancária própria, no <b class="marca">CNPJ da igreja</b>. Não se mistura com o caixa mensal nem com conta de ninguém.</p>
       </div>
       <div class="regra">
-        <div class="regra__selo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13l4 4L20 6"/><path d="M4 19h16"/></svg></div>
-        <h3>Duas assinaturas</h3><p>Toda saída precisa da tesouraria <b class="marca">e</b> de um membro do conselho fiscal, com comprovante arquivado.</p>
-      </div>
-      <div class="regra">
         <div class="regra__selo"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></div>
         <h3>Fechamento mensal</h3><p><b class="marca">Todo dia 5</b> o mês anterior é fechado, conferido contra o extrato e publicado aqui.</p>
       </div>
@@ -458,19 +477,6 @@ footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}
   </div>
 </section>
 
-<section class="sec" id="videos">
-  <div class="wrap">
-    <div class="sec__head">
-      <h2>Por que essa casa</h2>
-      <p>Antes de pedir, explicamos.</p>
-    </div>
-    <div class="videos">
-      <a class="video" href="#"><div class="video__ph"></div><div class="video__b"><b>O que aconteceu com a nossa sede</b><span>4 min · Pastor</span></div></a>
-      <a class="video" href="#"><div class="video__ph"></div><div class="video__b"><b>Conhecendo o novo prédio</b><span>3 min · Visita guiada</span></div></a>
-      <a class="video" href="#"><div class="video__ph"></div><div class="video__b"><b>Como o dinheiro é conferido</b><span>5 min · Tesouraria</span></div></a>
-    </div>
-  </div>
-</section>
 
 <section class="sec" id="doar">
   <div class="wrap">
@@ -492,18 +498,18 @@ footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}
             <li><span>Banco</span> <b>Cora SCFI</b></li>
             <li><span>Finalidade</span> <b>Campanha Casa Igreja Viva</b></li>
           </ul>
-          <p style="margin-top:18px;font-size:14px;color:var(--fumaca)">Esse é o nome que vai aparecer na confirmação do seu banco: <b style="color:#C9BCAC">Igreja Comunidade Cristã Aviva Nações</b>, a razão social da igreja.</p>
-          <p style="margin-top:12px;font-size:14px;color:var(--fumaca)">Doou? Envie o comprovante no WhatsApp da tesouraria para que sua doação entre na apuração desta página.</p>
+          <p style="margin-top:18px;font-size:14px;color:var(--fumaca)">Esse é o nome que vai aparecer na confirmação do seu banco: <b style="color:#C9BCAC">Igreja Comunidade Crista Aviva Nacoes</b>, a razão social da igreja.</p>
+          <p style="margin-top:12px;font-size:14px;color:var(--fumaca)"></p>
         </div>
         <div>
           <h3 style="margin-bottom:10px">Dá para ajudar de outras formas</h3>
           <p style="color:#BFB0A0;font-size:15.5px">Boa parte do que já foi arrecadado veio de trabalho, não de bolso.</p>
           <ul class="ajudas">
             <li>Levar uma rifa ou uma camisa da campanha</li>
-            <li>Trabalhar no lava-jato e no bazar aos sábados</li>
+            <li>Trabalhar na cantina, bazar e demais atividades a serem desenvolvidas</li>
             <li>Apresentar a campanha a uma empresa da região</li>
-            <li>Assumir uma cota por mês, como compromisso fixo</li>
-            <li>Divulgar esta página para quem já foi abençoado por esta igreja</li>
+            <li>Assumir uma cota por mês, como compromisso</li>
+            <li>Divulgar esta página para quem já foi abençoado por Deus, através desta igreja</li>
           </ul>
         </div>
       </div>
@@ -518,10 +524,6 @@ footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}
   </div>
 </footer>
 
-<div class="fixa">
-  <span>Uma cota<b id="fixaValor">—</b></span>
-  <a class="btn" href="#doar">Doar agora</a>
-</div>
 
 <script>
 /* ============================================================
@@ -758,7 +760,6 @@ function render(D){
   $('#cotasArea').textContent=num(cotasTotal);
   $('#precoM2').textContent=brl(cota);
   $('#btnCota').textContent=`Doar uma cota de ${brl(cota)}`;
-  $('#fixaValor').textContent=brl(cota);
   $('#m2Frase').textContent = cotasFeitas>0
     ? `Já são ${num(cotasFeitas)} cotas conquistadas pela comunidade. Faltam ${num(cotasTotal-cotasFeitas)} para a casa ser nossa.`
     : `São ${num(cotasTotal)} cotas ao todo. A primeira pode ser a sua.`;
